@@ -8,3 +8,6 @@ scrape_configs:
     static_configs:
       - targets:
           - "node-app:3000"
+    basic_auth:
+      username: "chirag"
+      password: "password"

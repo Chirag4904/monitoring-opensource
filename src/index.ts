@@ -15,11 +15,20 @@ app.get("/user",(req,res)=>{
 
 app.post("/user",(req,res)=>{
     res.json({
-        name:"chirag"
+        name:"chirag",
     })
 });
+const auth = (req:Request, res:Response, next:NextFunction) => {
+    const authHeader = req.headers.authorization;
 
-app.get("/metrics",async(req,res)=>{
+    if (!authHeader || authHeader !== 'Basic ' + Buffer.from('chirag:password').toString('base64')) {
+        res.status(401).send('Unauthorized');
+    } else {
+        next();
+    }
+};
+
+app.get("/metrics",auth,async(req,res)=>{
     const metrics = await client.register.metrics();
     res.set('Content-Type',client.register.contentType);
     res.send(metrics);
